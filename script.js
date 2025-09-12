@@ -4,17 +4,22 @@ const mobileContactBtn = document.querySelector('.mobile-contact-btn');
 // Mobile contact button functionality is handled by the href="#contact" attribute
 // No additional JavaScript needed for the new mobile navigation layout
 
-// Smooth scrolling for navigation links
+// Smooth scrolling for navigation links only (not external project links)
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
+        const href = this.getAttribute('href');
+        const target = document.querySelector(href);
+        
+        // Only apply smooth scrolling if the target element exists on the page
+        // This prevents interference with external links (project cards)
+        if (target && href.match(/^#(home|about|work|contact)$/)) {
+            e.preventDefault();
             target.scrollIntoView({
                 behavior: 'smooth',
                 block: 'start'
             });
         }
+        // For external links (project cards), let the browser handle normally
     });
 });
 
@@ -214,27 +219,14 @@ document.addEventListener('mousemove', () => {
     }
 });
 
-// Loading animation and ensure page starts at top
+// Loading animation without forced scroll to top
 window.addEventListener('load', () => {
-    // Scroll to top immediately
-    window.scrollTo(0, 0);
-    
     document.body.style.opacity = '0';
     document.body.style.transition = 'opacity 0.5s ease';
     
     setTimeout(() => {
         document.body.style.opacity = '1';
     }, 100);
-});
-
-// Ensure page starts at top on refresh
-window.addEventListener('beforeunload', () => {
-    window.scrollTo(0, 0);
-});
-
-// Additional fallback to ensure home page is shown
-document.addEventListener('DOMContentLoaded', () => {
-    window.scrollTo(0, 0);
 });
 
 // Performance optimization: Debounce scroll events
