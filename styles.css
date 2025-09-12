@@ -1701,8 +1701,10 @@ body {
             "quick-contact"
             "contact-form";
         gap: 30px;
-        margin: 0 20px;
+        margin: 0 auto;
         justify-items: center;
+        padding: 0 15px;
+        max-width: 450px;
     }
 
     .contact-option {
@@ -1922,7 +1924,7 @@ body {
 
     .about-description,
     .contact-description {
-        font-size: 1rem;
+        margin: 0 15px 30px 15px;
     }
 }
 
