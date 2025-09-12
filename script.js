@@ -170,57 +170,6 @@ document.querySelectorAll('.social-link').forEach(link => {
     });
 });
 
-// Cursor trail effect (optional enhancement)
-let mouseX = 0;
-let mouseY = 0;
-let trail = [];
-
-document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-});
-
-function createTrail() {
-    const trailElement = document.createElement('div');
-    trailElement.className = 'cursor-trail';
-    trailElement.style.cssText = `
-        position: fixed;
-        width: 4px;
-        height: 4px;
-        background: linear-gradient(135deg, #ff9500, #ffb347);
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 9999;
-        opacity: 0.7;
-        transition: all 0.3s ease;
-    `;
-    
-    trailElement.style.left = mouseX + 'px';
-    trailElement.style.top = mouseY + 'px';
-    
-    document.body.appendChild(trailElement);
-    
-    setTimeout(() => {
-        trailElement.style.opacity = '0';
-        trailElement.style.transform = 'scale(0)';
-        setTimeout(() => {
-            if (trailElement.parentNode) {
-                trailElement.parentNode.removeChild(trailElement);
-            }
-        }, 300);
-    }, 100);
-}
-
-// Throttled cursor trail
-let trailTimeout;
-document.addEventListener('mousemove', () => {
-    if (!trailTimeout) {
-        trailTimeout = setTimeout(() => {
-            createTrail();
-            trailTimeout = null;
-        }, 50);
-    }
-});
 
 // Loading animation without forced scroll to top
 window.addEventListener('load', () => {
@@ -538,4 +487,258 @@ if (mobileThemeToggle) {
     });
 }
 
-console.log('🚀 Portfolio website loaded successfully!');
+// Custom Cursor Functionality
+class CustomCursor {
+    constructor() {
+        this.cursor = document.querySelector('.custom-cursor');
+        this.cursorDot = document.querySelector('.cursor-dot');
+        this.cursorOutline = document.querySelector('.cursor-outline');
+        
+        this.cursorX = 0;
+        this.cursorY = 0;
+        this.dotX = 0;
+        this.dotY = 0;
+        this.outlineX = 0;
+        this.outlineY = 0;
+        
+        this.isVisible = true;
+        this.isHovering = false;
+        this.isClicking = false;
+        
+        this.init();
+    }
+    
+    init() {
+        // Only initialize on desktop devices
+        if (window.innerWidth <= 768) {
+            return;
+        }
+        
+        this.bindEvents();
+        this.render();
+    }
+    
+    bindEvents() {
+        // Mouse movement
+        document.addEventListener('mousemove', (e) => {
+            this.cursorX = e.clientX;
+            this.cursorY = e.clientY;
+        });
+        
+        // Mouse enter/leave window
+        document.addEventListener('mouseenter', () => {
+            this.isVisible = true;
+            this.cursor.classList.remove('cursor-hidden');
+        });
+        
+        document.addEventListener('mouseleave', () => {
+            this.isVisible = false;
+            this.cursor.classList.add('cursor-hidden');
+        });
+        
+        // Click events
+        document.addEventListener('mousedown', () => {
+            this.isClicking = true;
+            this.cursor.classList.add('cursor-click');
+        });
+        
+        document.addEventListener('mouseup', () => {
+            this.isClicking = false;
+            this.cursor.classList.remove('cursor-click');
+        });
+        
+        // Hover events for interactive elements
+        const interactiveElements = document.querySelectorAll(
+            'a, button, .btn, .project-card, .social-link, .contact-method, .nav-link, .theme-toggle, .mobile-theme-toggle, .calendly-btn, .form-submit, input, textarea, .skill-item'
+        );
+        
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                this.isHovering = true;
+                this.cursor.classList.add('cursor-hover');
+                
+                // Special pulse effect for buttons
+                if (el.classList.contains('btn') || el.classList.contains('calendly-btn') || el.classList.contains('form-submit')) {
+                    this.cursor.classList.add('cursor-pulse');
+                }
+            });
+            
+            el.addEventListener('mouseleave', () => {
+                this.isHovering = false;
+                this.cursor.classList.remove('cursor-hover', 'cursor-pulse');
+            });
+        });
+        
+        // Text selection state
+        const textElements = document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, span, li');
+        textElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                if (!this.isHovering) {
+                    this.cursor.classList.add('cursor-text');
+                }
+            });
+            
+            el.addEventListener('mouseleave', () => {
+                this.cursor.classList.remove('cursor-text');
+            });
+        });
+        
+        // Hide cursor when scrolling (optional)
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            this.cursor.style.opacity = '0.5';
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                this.cursor.style.opacity = '1';
+            }, 150);
+        });
+    }
+    
+    render() {
+        // Smooth following animation using lerp (linear interpolation)
+        const lerp = (start, end, factor) => start + (end - start) * factor;
+        
+        // Update both dot and outline position at the same speed (no trailing effect)
+        this.dotX = lerp(this.dotX, this.cursorX, 0.2);
+        this.dotY = lerp(this.dotY, this.cursorY, 0.2);
+        
+        this.outlineX = lerp(this.outlineX, this.cursorX, 0.2);
+        this.outlineY = lerp(this.outlineY, this.cursorY, 0.2);
+        
+        // Apply transforms
+        this.cursorDot.style.transform = `translate(${this.dotX}px, ${this.dotY}px)`;
+        this.cursorOutline.style.transform = `translate(${this.outlineX}px, ${this.outlineY}px)`;
+        
+        // Continue animation loop
+        requestAnimationFrame(() => this.render());
+    }
+    
+    // Method to temporarily hide cursor
+    hide() {
+        this.cursor.classList.add('cursor-hidden');
+    }
+    
+    // Method to show cursor
+    show() {
+        this.cursor.classList.remove('cursor-hidden');
+    }
+}
+
+// Initialize custom cursor
+let customCursor;
+document.addEventListener('DOMContentLoaded', () => {
+    customCursor = new CustomCursor();
+});
+
+// Reinitialize on window resize (for responsive behavior)
+window.addEventListener('resize', () => {
+    if (customCursor) {
+        if (window.innerWidth <= 768) {
+            customCursor.hide();
+        } else {
+            customCursor.show();
+        }
+    }
+});
+
+// Magnetic effect for special elements
+document.querySelectorAll('.btn-primary, .social-link, .theme-toggle').forEach(element => {
+    element.addEventListener('mousemove', (e) => {
+        if (window.innerWidth <= 768) return;
+        
+        const rect = element.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        
+        // Apply magnetic effect
+        const distance = Math.sqrt(x * x + y * y);
+        const maxDistance = 50;
+        
+        if (distance < maxDistance) {
+            const force = (maxDistance - distance) / maxDistance;
+            const moveX = x * force * 0.3;
+            const moveY = y * force * 0.3;
+            
+            element.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
+            
+            // Update cursor position slightly for magnetic effect
+            if (customCursor) {
+                customCursor.cursorX += moveX * 0.1;
+                customCursor.cursorY += moveY * 0.1;
+            }
+        }
+    });
+    
+    element.addEventListener('mouseleave', () => {
+        element.style.transform = 'translate(0px, 0px) scale(1)';
+    });
+});
+
+// Cursor ripple effect on click
+document.addEventListener('click', (e) => {
+    if (window.innerWidth <= 768) return;
+    
+    // Create ripple element
+    const ripple = document.createElement('div');
+    ripple.style.cssText = `
+        position: fixed;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255, 149, 0, 0.6) 0%, rgba(255, 149, 0, 0) 70%);
+        pointer-events: none;
+        z-index: 9998;
+        transform: translate(-50%, -50%) scale(0);
+        animation: cursorRipple 0.6s ease-out forwards;
+    `;
+    
+    ripple.style.left = e.clientX + 'px';
+    ripple.style.top = e.clientY + 'px';
+    
+    document.body.appendChild(ripple);
+    
+    // Add ripple animation if not already added
+    if (!document.querySelector('#cursor-ripple-styles')) {
+        const style = document.createElement('style');
+        style.id = 'cursor-ripple-styles';
+        style.textContent = `
+            @keyframes cursorRipple {
+                to {
+                    transform: translate(-50%, -50%) scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    // Remove ripple after animation
+    setTimeout(() => {
+        if (ripple.parentNode) {
+            ripple.remove();
+        }
+    }, 600);
+});
+
+// Enhanced cursor trail for special sections
+let isInHeroSection = false;
+const heroSection = document.querySelector('.hero');
+
+if (heroSection) {
+    const heroObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            isInHeroSection = entry.isIntersecting;
+            if (customCursor && window.innerWidth > 768) {
+                if (isInHeroSection) {
+                    customCursor.cursor.style.mixBlendMode = 'difference';
+                } else {
+                    customCursor.cursor.style.mixBlendMode = 'difference';
+                }
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    heroObserver.observe(heroSection);
+}
+
+console.log('🚀 Portfolio website with custom cursor loaded successfully!');
