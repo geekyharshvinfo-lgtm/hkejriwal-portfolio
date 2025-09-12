@@ -973,6 +973,20 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    /* Hide scrollbar on mobile to prevent right-side spacing */
+    ::-webkit-scrollbar {
+        display: none;
+    }
+    
+    html {
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
+    }
+    
+    body {
+        -ms-overflow-style: none; /* IE and Edge */
+    }
+
     .skills-track {
         animation: scroll-left 10s linear infinite;
     }
