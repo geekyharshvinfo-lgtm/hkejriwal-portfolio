@@ -98,7 +98,7 @@ body {
 .nav-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 40px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -108,13 +108,15 @@ body {
 .nav-menu {
     display: flex;
     list-style: none;
-    gap: 40px;
+    gap: 20px;
 }
 
 .nav-link {
     color: var(--text-primary);
     text-decoration: none;
     font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 25px;
     transition: all 0.3s ease;
     position: relative;
     outline: none;
@@ -125,39 +127,15 @@ body {
     box-shadow: none;
 }
 
+.nav-link:hover {
+    background: rgba(255, 149, 0, 0.1);
+    color: #ff9500;
+}
+
 .nav-link:active,
 .nav-link.active {
-    color: #ff9500;
     background: rgba(255, 149, 0, 0.1);
-    border-radius: 20px;
-    padding: 8px 16px;
-    margin: -8px -16px;
-}
-
-.nav-link:active::after,
-.nav-link.active::after {
-    width: 100%;
-    background: linear-gradient(135deg, #ff9500 0%, #ffb347 100%);
-}
-
-.nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: linear-gradient(135deg, #ff9500 0%, #ffb347 100%);
-    outline: none;
-    transition: width 0.3s ease;
-}
-
-.nav-link:hover::after {
-    width: 100%;
-}
-
-.nav-link:hover {
-    color: #ffb347;
+    color: #ff9500;
 }
 
 .hamburger {
