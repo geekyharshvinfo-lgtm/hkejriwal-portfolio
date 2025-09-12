@@ -9,6 +9,17 @@ html {
     scroll-behavior: smooth;
 }
 
+/* Disable smooth scrolling on mobile devices for better performance */
+@media (max-width: 768px) {
+    html {
+        scroll-behavior: auto !important;
+    }
+    
+    * {
+        scroll-behavior: auto !important;
+    }
+}
+
 body {
     font-family: 'Inter', sans-serif;
     background-color: #0a0a0a;
@@ -510,7 +521,7 @@ body {
 
 /* Work Section */
 .work {
-    padding: 120px 0;
+    padding: 60px 0 120px 0;
     background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
 }
 
@@ -520,8 +531,9 @@ body {
 
 .work-subtitle {
     text-align: center;
-    font-size: 1.2rem;
-    color: #888;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #ccc;
     margin-bottom: 60px;
     max-width: 600px;
     margin-left: auto;
@@ -981,6 +993,7 @@ body {
     html {
         scrollbar-width: none; /* Firefox */
         -ms-overflow-style: none; /* IE and Edge */
+        scroll-behavior: auto; /* Remove smooth scrolling on mobile to prevent delays */
     }
     
     body {
@@ -1118,6 +1131,10 @@ body {
         justify-content: center;
     }
 
+    .work-subtitle {
+        margin: 0 20px 60px 20px;
+    }
+
     .contact-description {
         margin: 0 20px 30px 20px;
     }
@@ -1231,11 +1248,11 @@ body {
     }
 }
 
-/* Scroll animations */
+/* Scroll animations disabled for work section */
 .fade-in {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.6s ease;
+    opacity: 1;
+    transform: translateY(0);
+    transition: none;
 }
 
 .fade-in.visible {
