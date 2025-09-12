@@ -1702,10 +1702,14 @@ body {
             "contact-form";
         gap: 30px;
         margin: 0 20px;
+        justify-items: center;
     }
 
     .contact-option {
         padding: 20px;
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
     }
 
     .option-header {
