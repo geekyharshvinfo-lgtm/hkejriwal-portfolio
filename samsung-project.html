@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samsung Supply Chain & Logistics Dashboard - Harshvardhan Kejriwal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .project-page {
+            min-height: 100vh;
+            padding: 2rem 0;
+            background: var(--bg-primary);
+        }
+
+        .project-header {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 2rem;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--accent-primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .back-button:hover {
+            background: var(--accent-secondary);
+            transform: translateX(-5px);
+        }
+
+        .back-button i {
+            font-size: 1rem;
+        }
+
+        .project-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .project-description {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .dashboard-wrapper {
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-wrapper iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 8px;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--accent-primary);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            background: var(--accent-secondary);
+            transform: scale(1.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .project-title {
+                font-size: 2rem;
+            }
+
+            .project-description {
+                font-size: 1rem;
+            }
+
+            .dashboard-wrapper iframe {
+                height: 400px;
+            }
+
+            .project-header,
+            .dashboard-container {
+                padding: 0 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .project-title {
+                font-size: 1.5rem;
+            }
+
+            .dashboard-wrapper {
+                padding: 0.5rem;
+            }
+
+            .dashboard-wrapper iframe {
+                height: 300px;
+            }
+        }
+
+        /* Dark mode variables (if not already in styles.css) */
+        :root {
+            --bg-primary: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --accent-primary: #6366f1;
+            --accent-secondary: #4f46e5;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f0f0f;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+        }
+
+        /* Custom Cursor Styles */
+        .custom-cursor {
+            display: none !important;
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(135deg, #ff9500 0%, #ffb347 100%);
+            border-radius: 50%;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            transition: all 0.1s ease;
+            box-shadow: 0 0 10px rgba(255, 149, 0, 0.5);
+        }
+
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(255, 149, 0, 0.5);
+            border-radius: 50%;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            transition: all 0.15s ease;
+            backdrop-filter: blur(2px);
+            background: rgba(255, 149, 0, 0.05);
+        }
+
+        /* Show default cursor (custom cursor disabled for this page) */
+        * {
+            cursor: auto !important;
+        }
+
+        /* Cursor hover states */
+        .cursor-hover .cursor-dot {
+            transform: translate(-50%, -50%) scale(1.5);
+            background: linear-gradient(135deg, #ffb347 0%, #ff9500 100%);
+            box-shadow: 0 0 20px rgba(255, 149, 0, 0.8);
+        }
+
+        .cursor-hover .cursor-outline {
+            transform: translate(-50%, -50%) scale(1.5);
+            border-color: rgba(255, 149, 0, 0.8);
+            background: rgba(255, 149, 0, 0.1);
+        }
+
+        /* Cursor click state */
+        .cursor-click .cursor-dot {
+            transform: translate(-50%, -50%) scale(0.8);
+            background: linear-gradient(135deg, #ff6b00 0%, #ff9500 100%);
+        }
+
+        .cursor-click .cursor-outline {
+            transform: translate(-50%, -50%) scale(0.8);
+            border-color: rgba(255, 149, 0, 1);
+        }
+
+        /* Cursor text state */
+        .cursor-text .cursor-dot {
+            transform: translate(-50%, -50%) scale(0.5);
+            background: linear-gradient(135deg, #ff9500 0%, #ffb347 100%);
+            box-shadow: 0 0 15px rgba(255, 149, 0, 0.6);
+        }
+
+        .cursor-text .cursor-outline {
+            transform: translate(-50%, -50%) scale(0.7);
+            border-color: rgba(255, 149, 0, 0.6);
+            background: rgba(255, 149, 0, 0.05);
+        }
+
+        /* Cursor hidden state */
+        .cursor-hidden .cursor-dot,
+        .cursor-hidden .cursor-outline {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        /* Pulse animation for special elements */
+        @keyframes cursor-pulse {
+            0% {
+                box-shadow: 0 0 10px rgba(255, 149, 0, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(255, 149, 0, 0.8), 0 0 35px rgba(255, 149, 0, 0.4);
+            }
+            100% {
+                box-shadow: 0 0 10px rgba(255, 149, 0, 0.5);
+            }
+        }
+
+        .cursor-pulse .cursor-dot {
+            animation: cursor-pulse 1.5s ease-in-out infinite;
+        }
+
+        /* Hide cursor on mobile devices */
+        @media (max-width: 768px) {
+            .custom-cursor {
+                display: none;
+            }
+            
+            * {
+                cursor: auto !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">
+        <i class="fas fa-sun" id="themeIcon"></i>
+    </button>
+
+    <!-- Project Page Content -->
+    <div class="project-page">
+        <div class="project-header">
+            <a href="index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+                Back to Portfolio
+            </a>
+            <h1 class="project-title">Samsung Supply Chain & Logistics Dashboard</h1>
+            <p class="project-description">
+                Designed a comprehensive Supply Chain & Logistics Dashboard for Samsung to oversee end-to-end operations involving $4.5B in revenue and 152M total orders. The tool integrates critical data points across procurement, production, inventory, and sales to optimize stock levels for flagship products, monitor supplier quality, and track shipment efficiency across global markets.
+            </p>
+        </div>
+
+        <div class="dashboard-container">
+            <div class="dashboard-wrapper">
+                <iframe 
+                    title="Samsung (2)" 
+                    width="600" 
+                    height="373.5" 
+                    src="https://app.powerbi.com/view?r=eyJrIjoiZWQzZDVmNTgtMzdiMi00NDhlLWE3YWMtMzJiZTI5OWM2ZTM0IiwidCI6IjVhMjc1MmVhLWZkMmItNGE1MC1hZGQyLWZhNTAzMmIxMGEyZCJ9&pageName=1018ef350484abbb2e2e" 
+                    frameborder="0" 
+                    allowFullScreen="true">
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor">
+        <div class="cursor-dot"></div>
+        <div class="cursor-outline"></div>
+    </div>
+
+    <script>
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const htmlElement = document.documentElement;
+
+        // Check for saved theme preference or default to 'light'
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        htmlElement.setAttribute('data-theme', currentTheme);
+        updateThemeIcon(currentTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            if (theme === 'dark') {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            } else {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        }
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
